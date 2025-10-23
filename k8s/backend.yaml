@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: backend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            # From ConfigMap (non-sensitive)
+            - name: MONGO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MONGO_HOST
+            - name: MONGO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MONGO_PORT
+            - name: BACKEND_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: BACKEND_PORT
+
+            # From Secret (sensitive)
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MONGO_USER
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MONGO_PASSWORD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP
