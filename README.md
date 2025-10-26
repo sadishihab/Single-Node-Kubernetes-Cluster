@@ -94,6 +94,7 @@ Project Structure
 1. **Start Minikube with Docker driver**:
 	```bash
 	minikube start --driver=docker
+ 	eval $(minikube docker-env)
 	```
 2. **Apply Kubernetes manifests**:
    
