@@ -23,11 +23,49 @@ The project demonstrates:
 
 
 ## Architecture Diagram
-<img width="1536" height="1024" alt="SIngle node kubernetes diagram" src="https://github.com/user-attachments/assets/0a8becb2-e302-466e-a9dd-9ad446e840a9" />
+```pgsql
+                   ┌────────────────────────────┐
+                   │      Browser / User        │
+                   └──────────────┬─────────────┘
+                                  │
+                                  ▼
+                        ┌──────────────────┐
+                        │     Ingress      │
+                        │ (NGINX / Rules)  │
+                        └───────┬──────────┘
+                                │
+                ┌───────────────┴────────────────┐
+                │                                │
+                ▼                                ▼
+     ┌───────────────────┐             ┌───────────────────┐
+     │   Frontend Pod    │             │   Backend Pod     │
+     │ (React / Node.js) │◄──────────►│ (Node.js / API)   │
+     │   ClusterIP SVC   │             │   ClusterIP SVC   │
+     └────────┬──────────┘             └────────┬──────────┘
+              │                                 │
+              │                                 ▼
+              │                     ┌───────────────────┐
+              │                     │   MongoDB Pod     │
+              │                     │ (Database Layer)  │
+              │                     │ Persistent Volume │
+              │                     └────────┬──────────┘
+              │                              │
+              │                     ┌───────────────────┐
+              │                     │ PVC + PV (Storage)│
+              │                     └───────────────────┘
+              │
+   ┌──────────────────────────┐
+   │ ConfigMaps & Secrets     │
+   │ (Env vars, credentials)  │
+   └──────────────────────────┘
+
+   [ Single-node Minikube cluster (Docker driver) ]
+
+```
 
 
 
-📋 Project Structure
+Project Structure
 ```graphql
 .
 ├── frontend/               # Frontend application code
@@ -41,7 +79,7 @@ The project demonstrates:
 └── README.md
 
 ```
-## ⚡ Prerequisites
+## Prerequisites
 
 - Docker
     
@@ -51,33 +89,49 @@ The project demonstrates:
     
 - (Optional) Helm for advanced deployments
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 1. **Start Minikube with Docker driver**:
 	```bash
 	minikube start --driver=docker
 	```
 2. **Apply Kubernetes manifests**:
+   
+   Apply ConfigMaps and Secrets
 	```bash
-	kubectl apply -f k8s/deployments/
-	kubectl apply -f k8s/services/
-	kubectl apply -f k8s/configmaps-secrets/
-	kubectl apply -f k8s/pvc.yaml
+ 	kubectl apply -f k8s/app-configmap.yaml
+	kubectl apply -f k8s/app-secret.yaml
+	```
+ 	Apply MongoDB storage and deployment
+	```bash
+ 	kubectl apply -f k8s/mongo-pv.yaml
+	kubectl apply -f k8s/mongo-pvc.yaml
+	kubectl apply -f k8s/mongo-storage-setup.yaml
+	kubectl apply -f k8s/mongo.yaml
+	```
+	Apply application deployments
+	```bash
+	kubectl apply -f k8s/backend.yaml
+	kubectl apply -f k8s/frontend.yaml
+	```
+	Apply Ingress  
+	```bash
 	kubectl apply -f k8s/ingress.yaml
 	```
-3. **Check pods, services, and ingress**:
+ 
+4. **Check pods, services, and ingress**:
 	```bash
 	kubectl get pods
 	kubectl get svc
 	kubectl get ingress
 	```
-4. **Access the application** via browser:
+5. **Access the application** via browser:
 	```
 	minikube tunnel
 	```
 	Open the browser at the configured **Ingress host URL**.
 
-## 🔧 Features Practiced
+## Features Practiced
 
 - Multi-service deployments on Kubernetes
     
@@ -89,7 +143,7 @@ The project demonstrates:
     
 - Pod scaling and rolling updates
 -
-## 🧩 Learning Outcomes
+## Learning Outcomes
 
 - Hands-on experience with single-node Kubernetes clusters
     
@@ -99,7 +153,7 @@ The project demonstrates:
     
 - Best practices for configuration and persistent storage
 
-## 📌 References
+## References
 
 - Kubernetes Official Docs
     
