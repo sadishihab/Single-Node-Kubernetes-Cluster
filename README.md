@@ -132,6 +132,57 @@ Project Structure
 	```
 	Open the browser at the configured **Ingress host URL**.
 
+## Kubernetes Management Script — k8s-manage.sh
+
+An all-in-one automation script to simplify Kubernetes environment management — enabling you to stop, start, backup, or restore all deployments and services across namespaces.
+
+**Features**  
+
+- Stop All Deployments: Scales all deployments to 0 replicas (and saves replica counts).
+- Start Deployments: Restores deployments to their previous replica counts.
+- Backup: Saves deployments and services (YAML) per namespace to ./k8s-backups.
+- Restore: Recreates namespaces, deployments, and services from backups.
+- Namespace Filtering: Run operations on specific namespaces only.
+
+**Usage**  
+Stop all deployments and save replica states
+```bash
+./k8s-manage.sh --stop
+```
+Restart all deployments from saved replicas
+```bash
+./k8s-manage.sh --start
+```
+Backup all deployments & services
+```bash
+./k8s-manage.sh --save
+```
+Restore from previous backups
+```bash
+./k8s-manage.sh --restore
+```
+Operate on a single namespace
+```bash
+./k8s-manage.sh --stop my-namespace
+```
+
+Backup Structure:  
+```markdown
+k8s-backups/
+├── dev_20251026-1420/
+│   ├── deployments.yaml
+│   ├── services.yaml
+│   └── replicas.txt
+└── prod_20251026-1420/
+    ├── deployments.yaml
+    ├── services.yaml
+    └── replicas.txt
+```
+
+Requirements:  
+- kubectl configured for the target cluster
+- jq installed (for JSON parsing)
+
 ## Features Practiced
 
 - Multi-service deployments on Kubernetes
