@@ -207,12 +207,10 @@ Requirements:
 
 ## References
 
-- Kubernetes Official Docs
-    
-- Minikube Official Docs
-    
-- Docker Official Docs
+- [Kubernetes Official Docs](https://kubernetes.io/docs/)
+- [Minikube Official Docs](https://minikube.sigs.k8s.io/docs/)
+- [Docker Official Docs](https://docs.docker.com/)
 
 ## License
 
-This project is open-source and available under the MIT License
+This project is open-source and available under the **MIT License**
