@@ -75,7 +75,7 @@ Project Structure
 │   ├── services           # Service YAML files
 │   ├── ingress.yaml        # Ingress configuration
 │   ├── pvc.yaml            # Persistent Volume Claim for MongoDB
-│   └── configmaps-secrets/ # ConfigMaps and Secrets YAMLs
+│   └── configmaps-secrets  # ConfigMaps and Secrets YAMLs
 └── README.md
 
 ```
