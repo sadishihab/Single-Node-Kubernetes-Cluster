@@ -71,8 +71,8 @@ Project Structure
 ├── frontend/               # Frontend application code
 ├── backend/                # Backend application code
 ├── k8s/                    # Kubernetes manifests
-│   ├── deployments/        # Deployment YAML files
-│   ├── services/           # Service YAML files
+│   ├── deployments        # Deployment YAML files
+│   ├── services           # Service YAML files
 │   ├── ingress.yaml        # Ingress configuration
 │   ├── pvc.yaml            # Persistent Volume Claim for MongoDB
 │   └── configmaps-secrets/ # ConfigMaps and Secrets YAMLs
